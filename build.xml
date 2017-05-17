@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="prologj">
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+
+    <property environment="env"/>
+    <property name="junit.output.dir" value="junit"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+
+    <path id="junit4.classpath">
+        <pathelement location="/usr/share/java/junit4.jar"/>
+        <pathelement location="/usr/share/java/hamcrest-core.jar"/>
+    </path>
+
+    <path id="prologj.classpath">
+        <pathelement location="bin"/>
+        <path refid="junit4.classpath"/>
+    </path>
+
+    <target name="init">
+        <mkdir dir="bin"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+
+    <target name="build" depends="init"  >
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <src path="test"/>
+            <classpath refid="prologj.classpath"/>
+        </javac>
+    </target>
+
+    <target name="test" depends="build">
+      <junit printsummary="yes" haltonfailure="yes">
+          <classpath refid="prologj.classpath"/>
+          <batchtest fork="yes" todir="${dir.report.unittests.xml}">
+              <fileset dir="test">
+                  <include name="**/*Test*.java"/>
+              </fileset>
+          </batchtest>
+      </junit>
+    </target>
+
+</project>
